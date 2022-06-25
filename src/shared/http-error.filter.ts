@@ -1,3 +1,5 @@
+//* http-error.filter.ts
+
 import {   ArgumentsHost, Catch, ExceptionFilter, HttpException, Logger,
 } from '@nestjs/common';
 
@@ -20,6 +22,9 @@ export class HttpErrorFilter implements ExceptionFilter {
       message: exception.message || exception || null,
     };
 
+    res.status(status).json(errResponse);
+
+
     //Feature-2: Custom error logging
     Logger.error(
       `Custom error :\n method is: ${req.method} \n url is :${req.url}`,
@@ -27,6 +32,5 @@ export class HttpErrorFilter implements ExceptionFilter {
       'MyExceptionFilter',
     );
 
-    res.status(status).json(errResponse);
   }
 }
