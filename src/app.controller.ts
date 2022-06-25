@@ -1,0 +1,28 @@
+//app.controller.ts
+import { Controller, Get, Inject, LoggerService } from '@nestjs/common';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+
+@Controller('cats')
+export class AppController {
+  constructor(
+    @Inject(WINSTON_MODULE_NEST_PROVIDER)
+    private readonly logger: LoggerService,
+  ) {}
+
+  @Get()
+  getHello(): void {
+    this.logger.log('\n=====  Log level demo ==== \n');
+    this.logger.warn('Calling getHello()', AppController.name);
+    this.logger.log('Calling getHello()', AppController.name);                        //no option this.logger.info uses 'log' alias
+    //no option for this.logger.http
+    this.logger.verbose('Calling getHello()', AppController.name);
+    this.logger.debug('Calling getHello()', AppController.name);
+    //no option for this.logger.silly
+
+    try {
+      throw new Error();
+    } catch (e) {
+      this.logger.error('Calling getHello()', e.stack, AppController.name);
+    }
+  }
+}
