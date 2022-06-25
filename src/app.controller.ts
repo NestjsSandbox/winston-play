@@ -2,14 +2,14 @@
 import { Controller, Get, Inject, LoggerService } from '@nestjs/common';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
-@Controller('cats')
+@Controller()
 export class AppController {
   constructor(
     @Inject(WINSTON_MODULE_NEST_PROVIDER)
     private readonly logger: LoggerService,
   ) {}
 
-  @Get()
+  @Get('logs')
   getHello(): void {
     this.logger.log('\n=====  Log level demo ==== \n');
     this.logger.warn('Calling getHello()', AppController.name);
@@ -22,7 +22,21 @@ export class AppController {
     try {
       throw new Error();
     } catch (e) {
-      this.logger.error('Calling getHello()', e.stack, AppController.name);
+      this.logger.error('Test error calling getHello()', e.stack, AppController.name);
+      console.log('my test error');
     }
   }
+
+  @Get('err')
+  getErr(): string{
+    try {
+      throw new Error();
+    } catch (e) {
+      //this.logger.error('Calling getHello()', e.stack, AppController.name);
+      console.log('Triggered an error response', e.stack)
+    }
+    return 'Hello from err route';
+  }
+
+
 }
